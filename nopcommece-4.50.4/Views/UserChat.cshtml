@@ -7,7 +7,7 @@
 	string id = user.Email == null ? user.CustomerGuid.ToString() : user.Email;
 }
 
-<script asp-exclude-from-bundle="true" src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js" asp-location="Footer"></script>
+<script asp-exclude-from-bundle="true" src="~/Plugins/Customers.NopChat/Content/Scripts/dist/browser/signalr.min.js" asp-location="Footer"></script>
 <script asp-exclude-from-bundle="true" src="~/Plugins/Customers.NopChat/Content/Scripts/ChatWindow.js" asp-location="Footer"></script>
 <link rel="stylesheet" href="~/Plugins/Customers.NopChat/Content/css/chat_style.css" />
 

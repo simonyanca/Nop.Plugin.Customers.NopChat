@@ -74,6 +74,18 @@
     <None Update="Content\Scripts\ChatWindow.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Content\Scripts\dist\browser\signalr.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Scripts\dist\browser\signalr.min.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Scripts\dist\browser\signalr.min.js.map">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Scripts\signalr\dist\browser\signalr.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="uploadeditems.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
