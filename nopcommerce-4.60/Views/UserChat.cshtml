@@ -1,0 +1,45 @@
+﻿
+
+@using Nop.Core;
+@inject IWorkContext _workContext;
+
+
+@{
+	var user = await _workContext.GetCurrentCustomerAsync();
+	string id = user.Email == null ? user.CustomerGuid.ToString() : user.Email;
+}
+
+<script asp-exclude-from-bundle="true" src="~/Plugins/Customers.NopChat/Content/Scripts/dist/browser/signalr.min.js" asp-location="Footer"></script>
+<script asp-exclude-from-bundle="true" src="~/Plugins/Customers.NopChat/Content/Scripts/ChatWindow.js" asp-location="Footer"></script>
+<link rel="stylesheet" href="~/Plugins/Customers.NopChat/Content/css/chat_style.css" />
+
+<script>
+	var chatWindow = new ChatWindow("chat-container", '@id');
+    
+	if(chatWindow.NopChatActive())
+	{
+		chatWindow.SetToUserId("Admin");
+		document.querySelector('#chat-container').style.display = 'block';
+	}
+
+	const chatBtn = document.querySelector('.chat-btn');
+	chatBtn.addEventListener('click', () => {
+		chatWindow.SetToUserId("Admin");
+		document.querySelector('#chat-container').style.display = 'block';
+	});
+</script>
+
+<button class="chat-btn">@T("Plugins.Customers.NopChat.Text.Chat").Text</button>
+
+<div id="chat-container" class="chat-container-float" @(Context.Request.Cookies.ContainsKey("NopChatActive") && Context.Request.Cookies["NopChatActive"] == "true"? "style=display: none;" : "")>
+	<div class="head-chat-container">
+		<button class="boton-cerrar close-btn">
+			<img src="~/Plugins/Customers.NopChat/Content/img/close.png" class="editor_img"  border="0">
+		</button>
+	</div>
+	<div class="messages"></div>
+	<div class="input-container">
+		<textarea class="message-input" placeholder="@T("Plugins.Customers.NopChat.Text.WriteMessage").Text"></textarea>
+		<button class="send-btn">@T("Plugins.Customers.NopChat.Text.Send").Text</button>
+	</div>
+</div>
