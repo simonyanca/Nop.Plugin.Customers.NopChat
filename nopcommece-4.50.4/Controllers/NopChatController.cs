@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.SignalR;
 using Nop.Plugin.Customers.NopChat.Hubs;
 using DocumentFormat.OpenXml.EMMA;
 using System.Net.NetworkInformation;
+using Nop.Core;
 
 namespace Nop.Plugin.Customers.NopChat.Controllers
 {
@@ -34,20 +35,22 @@ namespace Nop.Plugin.Customers.NopChat.Controllers
         private readonly IPermissionService _permissionService;
         private readonly INopChatMessageModelFactory _NopChatMessageModelFactory;
         private readonly INopChatMessageService _NopChatMessageService;
+        private readonly IStoreContext _storeContext;
+		#endregion
 
-        #endregion
+		#region Ctor
 
-        #region Ctor
-
-        public NopChatController(
+		public NopChatController(
             IPermissionService permissionService,
 			INopChatMessageModelFactory NopChatMessageModelFactory,
-			INopChatMessageService NopChatMessageService
-        )
+			INopChatMessageService NopChatMessageService,
+			IStoreContext StoreContext
+		)
         {
             _permissionService = permissionService;
 			_NopChatMessageModelFactory = NopChatMessageModelFactory;
 			_NopChatMessageService = NopChatMessageService;
+            _storeContext = StoreContext; 
         }
 
         #endregion
@@ -62,13 +65,15 @@ namespace Nop.Plugin.Customers.NopChat.Controllers
 
             //prepare model
             var m = new NopChatSearchModel();
-            var model = await _NopChatMessageModelFactory.PrepareNopChatsListModelAsync(m);
+			m.StoreId = _storeContext.GetCurrentStore().Id;
+			var model = await _NopChatMessageModelFactory.PrepareNopChatsListModelAsync(m);
             return View("~/Plugins/Customers.NopChat/Views/Configure.cshtml", model);
         }
 
         public async Task<IActionResult> Chat(int id)
         {
-            NopChatModel model = await _NopChatMessageService.GetChat(id);
+            var storeId = _storeContext.GetCurrentStore().Id; 
+			NopChatModel model = await _NopChatMessageService.GetChat(id, storeId);
             return View("~/Plugins/Customers.NopChat/Views/AdminChat.cshtml", model);
         }
 
@@ -76,6 +81,7 @@ namespace Nop.Plugin.Customers.NopChat.Controllers
         public async Task<IActionResult> List(NopChatSearchModel searchModel)
         {
             //prepare model
+            searchModel.StoreId = _storeContext.GetCurrentStore().Id;
             var model = await _NopChatMessageModelFactory.NopChatSearchModelAsync(searchModel);
             return Json(model);
         }

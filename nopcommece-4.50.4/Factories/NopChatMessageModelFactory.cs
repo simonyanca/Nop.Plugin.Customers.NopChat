@@ -19,32 +19,34 @@ namespace Nop.Plugin.Customers.NopChat.Factories
         #region Fields
 
         private readonly INopChatMessageService _NopChatMessageService;
-        private readonly ILocalizationService _localizationService;
-        private readonly IStoreService _storeService;
         private readonly ICustomerService _customerService;
 
         #endregion
 
         #region Ctor
 
-        public NopChatMessageModelFactory(INopChatMessageService NopChatMessageService, ILocalizationService localizationService, IStoreService storeService, ICustomerService customerService)
+        public NopChatMessageModelFactory(INopChatMessageService NopChatMessageService, ICustomerService customerService)
         {
             _NopChatMessageService = NopChatMessageService;
-            _localizationService = localizationService;
-            _storeService = storeService;
             _customerService = customerService;
         }
 
         public async Task<NopChatListModel> NopChatSearchModelAsync(NopChatSearchModel searchModel)
         {
-            var pickupPoints = await _NopChatMessageService.GetLastMessagesAsync(0,pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
-            NopChatListModel model = await new NopChatListModel().PrepareToGridAsync(searchModel, pickupPoints, () =>
+			var data = await _NopChatMessageService.GetLastMessagesAsync(searchModel.StoreId, pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
+            NopChatListModel model = await new NopChatListModel().PrepareToGridAsync(searchModel, data, () =>
             {
-                return pickupPoints.SelectAwait(async point =>
+                return data.SelectAwait(async e =>
                 {
-                    var store = await _storeService.GetStoreByIdAsync(point.StoreId);
-                    HeadNopChatModel m = point.ToModel<HeadNopChatModel>();
-                    //m.CustomerName = (await _customerService.GetCustomerByIdAsync(point.ReceiverId)).Username;
+                    HeadNopChatModel m = e.ToModel<HeadNopChatModel>();
+                    if (e.FromUserId == "Admin")
+                        m.Name = "Admin";
+                    else
+                    {
+						var user = await _customerService.GetCustomerByEmailAsync(e.FromUserId);
+						m.Name = user == null ? "Anonymous" : user.Username;
+					}
+                    
                     return m;
                 });
             });

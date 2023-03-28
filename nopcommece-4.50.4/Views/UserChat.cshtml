@@ -21,15 +21,17 @@
 	});
 </script>
 
-<button class="chat-btn">Chat</button>
+<button class="chat-btn">@T("Plugins.Customers.NopChat.Text.Chat").Text</button>
 
 <div id="chat-container" class="chat-container-float" style="display: none;">
 	<div class="head-chat-container">
-		<button class="close-btn">Cerrar</button>
+		<button class="boton-cerrar close-btn">
+			<img src="~/Plugins/Customers.NopChat/Content/img/close.png" class="editor_img"  border="0">
+		</button>
 	</div>
 	<div class="messages"></div>
 	<div class="input-container">
-		<textarea class="message-input" placeholder="Escribe un mensaje..."></textarea>
-		<button class="send-btn">Send</button>
+		<textarea class="message-input" placeholder="@T("Plugins.Customers.NopChat.Text.WriteMessage").Text"></textarea>
+		<button class="send-btn">@T("Plugins.Customers.NopChat.Text.Send").Text</button>
 	</div>
 </div>

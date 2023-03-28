@@ -21,7 +21,10 @@ namespace Nop.Plugin.Customers.NopChat.Models
 
 		public string FromUserId { get; set; }
 
-		[NopResourceDisplayName("Plugins.Customers.NopChat.Fields.Message")]
+		[NopResourceDisplayName("Plugins.Customers.NopChat.Fields.Name")]
+		public string Name { get; set; }
+
+		[NopResourceDisplayName("Plugins.Customers.NopChat.Fields.LastMessage")]
 		public string LastMessage { get; set; }
 
 

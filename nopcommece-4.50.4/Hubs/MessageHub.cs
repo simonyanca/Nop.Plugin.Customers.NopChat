@@ -10,6 +10,7 @@ using Nop.Core;
 using Nop.Plugin.Customers.NopChat.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.ServiceModel.Channels;
 using System.Threading.Tasks;
 
@@ -19,15 +20,15 @@ namespace Nop.Plugin.Customers.NopChat.Hubs
     public class MessageHub : Hub
     {
         private readonly INopChatMessageService _nopChatService;
-        private readonly IWorkContext _workContext;
         private readonly IHubContext<MessageHub> _messageHubContext;
-        private static Dictionary<string, string> userConIdMap = new Dictionary<string, string>();
+        private readonly IStoreContext _storeContext;
+		private static Dictionary<string, string> userConIdMap = new Dictionary<string, string>();
 
-        public MessageHub(IHubContext<MessageHub> messageHubContext, INopChatMessageService nopChatService, IWorkContext workContext)
+        public MessageHub(IHubContext<MessageHub> messageHubContext, INopChatMessageService nopChatService, IStoreContext StoreContext)
         {
             _messageHubContext = messageHubContext;
             _nopChatService = nopChatService;
-            _workContext = workContext;
+            _storeContext = StoreContext;
         }
         
         public override Task OnConnectedAsync()
@@ -51,10 +52,12 @@ namespace Nop.Plugin.Customers.NopChat.Hubs
             return base.OnDisconnectedAsync(exception);
         }
 
-        public async Task GetChatMessages(string chatId)
+        public async Task GetChatMessages(string chatId, int limit)
         {
-			var chat = await _nopChatService.GetChat(chatId);
-			await _messageHubContext.Clients.Client(this.Context.ConnectionId).SendAsync("ChatMessages", chat.Messages);
+			var storeId = _storeContext.GetCurrentStore().Id;
+			var chat = await _nopChatService.GetChat(chatId, storeId);
+            var messages = chat.Messages.Take(limit);
+			await _messageHubContext.Clients.Client(this.Context.ConnectionId).SendAsync("ChatMessages", messages);
 		}
 
         public async Task AreYouAlive(string userId)
@@ -74,7 +77,6 @@ namespace Nop.Plugin.Customers.NopChat.Hubs
             string UserId = userConIdMap[this.Context.ConnectionId];
             NopChatMessage m = new NopChatMessage()
             {
-                StoreId = 0,
                 FromUserId = UserId,
                 ToUserId = "Admin",
                 Message = message,
@@ -93,7 +95,6 @@ namespace Nop.Plugin.Customers.NopChat.Hubs
             
             NopChatMessage m = new NopChatMessage()
             {
-                StoreId = 0,
                 FromUserId = "Admin",
                 ToUserId = userId,
                 Message = message,

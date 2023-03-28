@@ -7,6 +7,7 @@ class ChatWindow  {
         this.toUserId = "Admin";
         this.fromUserId = fromUserId;
         this.IsAdmin = fromUserId == "Admin";
+        this.LimitMessages = 50;
 
         this.connection = new signalR.HubConnectionBuilder().withUrl("/notify?userId=" + fromUserId).build();
 
@@ -107,11 +108,11 @@ class ChatWindow  {
         await this.TryConnect();
 
         if (this.IsAdmin) {
-            this.connection.invoke("GetChatMessages", this.toUserId);
+            this.connection.invoke("GetChatMessages", this.toUserId, this.LimitMessages);
             this.connection.invoke("AreYouAlive", this.toUserId);
         }
         else
-            this.connection.invoke("GetChatMessages", this.fromUserId);
+            this.connection.invoke("GetChatMessages", this.fromUserId, this.LimitMessages);
     }
 
     async TryConnect() {

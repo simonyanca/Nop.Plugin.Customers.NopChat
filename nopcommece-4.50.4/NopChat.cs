@@ -29,16 +29,12 @@ namespace Nop.Plugin.Customers.NopChat
             _widgetSettings = widgetSettings;
             _settingService = settingService;
             _localizationService = localizationService;
-        }
+		}
 
         public Type GetWidgetViewComponent(string widgetZone)
         {
             if (widgetZone == null)
                 throw new ArgumentNullException(nameof(widgetZone));
-
-            //string[] zones = _codeInjectorService.GetActiveZones().Result;
-            //if (zones.Contains(widgetZone))
-            //    return typeof(CodeViewComponent);
 
             return null;
         }
@@ -67,7 +63,15 @@ namespace Nop.Plugin.Customers.NopChat
                 ["Plugins.Customers.NopChat.Fields.ChatId"] = "Id",
                 ["Plugins.Customers.NopChat.Fields.LastMessage"] = "Last Message",
                 ["Plugins.Customers.NopChat.Fields.DateTime"] = "Date Time",
-                ["Plugins.Customers.NopChat.Fields.Description"] = "Description",
+				["Plugins.Customers.NopChat.Fields.UpdateDateTime"] = "Date Time",
+				["Plugins.Customers.NopChat.Fields.Name"] = "Name",
+
+				["Plugins.Customers.NopChat.Text.Chat"] = "Chat",
+                ["Plugins.Customers.NopChat.Text.Close"] = "Close",
+                ["Plugins.Customers.NopChat.Text.Send"] = "Send",
+				["Plugins.Customers.NopChat.Text.WriteMessage"] = "Write message...",
+				["Plugins.Customers.NopChat.Text.OpenChat"] = "Open",
+				["Plugins.Customers.NopChat.Text.Disconnected"] = "Disconnected"
 			});
 
 			await base.InstallAsync();

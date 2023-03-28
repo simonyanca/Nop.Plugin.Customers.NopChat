@@ -48,7 +48,7 @@ namespace Nop.Plugin.Customers.NopChat.Services
 
 
 
-        public virtual async Task<IPagedList<NopChatMessage>> GetLastMessagesAsync(int storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
+        public virtual async Task<IPagedList<NopChatMessage>> GetLastMessagesAsync(int storeId, int pageIndex = 0, int pageSize = int.MaxValue)
         {
             var query = (
                        from d in _NopChatMessageRepository.Table.AsEnumerable()
@@ -67,7 +67,7 @@ namespace Nop.Plugin.Customers.NopChat.Services
             return new PagedList<NopChatMessage>(rez, pageIndex, pageSize, totalCount);
         }
 
-        public virtual async Task<IPagedList<NopChatMessage>> GetAllNopChatMessagesAsync(int storeId = 0, int pageIndex = 0, int pageSize = int.MaxValue)
+        public virtual async Task<IPagedList<NopChatMessage>> GetAllNopChatMessagesAsync(int storeId, int pageIndex = 0, int pageSize = int.MaxValue)
         {
             var query = _NopChatMessageRepository.Table.Where(point => point.StoreId == storeId);
             int totalCount = await query.CountAsync();
@@ -83,27 +83,26 @@ namespace Nop.Plugin.Customers.NopChat.Services
 
         public virtual async Task InsertNopChatMessageAsync(NopChatMessage message)
         {
-            message.StoreId = await _storeContext.GetActiveStoreScopeConfigurationAsync();
-            message.CreatedOnUtc = DateTime.Now;
-            
+            message.StoreId = _storeContext.GetCurrentStore().Id;
+            message.CreatedOnUtc = DateTime.Now;   
             await _NopChatMessageRepository.InsertAsync(message, false);
         }
 
-        public async Task<NopChatMessage> GetNopChatMessageByIdAsync(int messageId)
+        public async Task<NopChatMessage> GetNopChatMessageByIdAsync(int messageId, int storeId)
         {
             NopChatMessage m = await _NopChatMessageRepository.GetByIdAsync(messageId);
             return m;
         }
 
-        public async Task<NopChatModel> GetChat(int id)
+        public async Task<NopChatModel> GetChat(int id, int storeId)
         {
             NopChatMessage m = await _NopChatMessageRepository.GetByIdAsync(id);
-            return await GetChat(m.FromUserId);
+            return await GetChat(m.FromUserId, storeId);
         }
 
-        public async Task<NopChatModel> GetChat(string userId)
+        public async Task<NopChatModel> GetChat(string userId, int storeId)
         {
-            IEnumerable<NopChatMessage> messages = await _NopChatMessageRepository.Table.Where(r => r.FromUserId == userId || r.ToUserId == userId)
+            IEnumerable<NopChatMessage> messages = await _NopChatMessageRepository.Table.Where(r => r.StoreId == storeId &&( r.FromUserId == userId || r.ToUserId == userId))
                 .OrderByDescending(r => r.Id).ToListAsync();
             NopChatModel model = new NopChatModel()
             {
@@ -113,6 +112,6 @@ namespace Nop.Plugin.Customers.NopChat.Services
             
             return model;
         }
-    }
+	}
         #endregion
 }

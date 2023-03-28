@@ -29,7 +29,7 @@
     };
 
     function PaintButton(data, type, row, meta) {
-        return '<button class="start-chat-button" onclick="StartChat(\'' + row.ChatId + '\')">@T("Plugins.Customers.NopChat.Fields.OpenChat").Text,</button>';
+        return '<button class="start-chat-button" onclick="StartChat(\'' + row.ChatId + '\')">@T("Plugins.Customers.NopChat.Fields.OpenChat").Text</button>';
     };
 
 </script>
@@ -38,10 +38,10 @@
 <div id="chat-container" class="admin-chat-container" >
     <div class="head-text" ></div>
 	<div class="messages"></div>
-    <div class="disconnected-message">Disconnected</div>
+    <div class="disconnected-message">@T("Plugins.Customers.NopChat.Text.Disconnected").Text</div>
     <div class="message-container">
-	    <textarea class="message-input" placeholder="Escribe un mensaje..."></textarea>
-	    <button class="send-btn">Send</button>
+	    <textarea class="message-input" placeholder="@T("Plugins.Customers.NopChat.Text.WriteMessage").Text"></textarea>
+	    <button class="send-btn">@T("Plugins.Customers.NopChat.Text.Send").Text</button>
     </div>
 </div>
 
@@ -67,17 +67,22 @@
                     new ColumnProperty(nameof(HeadNopChatModel.ChatId))
                     {
                         Title = T("Plugins.Customers.NopChat.Fields.ChatId").Text,
-                        Width = "33%"
+                        Width = "25%"
+                    },
+                    new ColumnProperty(nameof(HeadNopChatModel.Name))
+                    {
+                        Title = T("Plugins.Customers.NopChat.Fields.Name").Text,
+                        Width = "25%"
                     },
                     new ColumnProperty(nameof(HeadNopChatModel.LastMessage))
                     {
                         Title = T("Plugins.Customers.NopChat.Fields.LastMessage").Text,
-                        Width = "33%"
+                        Width = "25%"
                     },
                     new ColumnProperty(nameof(HeadNopChatModel.UpdateOnUtc))
                     {
                         Title = T("Plugins.Customers.NopChat.Fields.DateTime").Text,
-                        Width = "33%"
+                        Width = "25%"
                     }
                 }
             })
