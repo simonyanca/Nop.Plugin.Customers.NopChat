@@ -1,0 +1,92 @@
+﻿@inject Nop.Core.Domain.Common.AdminAreaSettings adminAreaSettings
+
+@using Nop.Plugin.Customers.NopChat.Models;
+@using Nop.Web.Framework.Models.DataTables
+@model NopChatSearchModel
+@{
+    Layout = "_ConfigurePlugin";
+}
+
+
+<script asp-exclude-from-bundle="true" src="~/Plugins/Customers.NopChat/Content/Scripts/dist/browser/signalr.min.js" asp-location="Footer"></script>
+<script asp-exclude-from-bundle="true" src="~/Plugins/Customers.NopChat/Content/Scripts/ChatWindow.js" asp-location="Footer"></script>
+<link rel="stylesheet" href="~/Plugins/Customers.NopChat/Content/css/chat_style.css" />
+
+
+<script>
+    var chatWindow = new ChatWindow('chat-container',"Admin");
+
+    async function initChat() {
+        await chatWindow.TryConnect();
+    }
+
+    initChat();
+
+    function StartChat(userId)
+    {
+        document.getElementById("chat-container").style.display = "block";
+        chatWindow.SetToUserId(userId);
+    };
+
+    function PaintButton(data, type, row, meta) {
+        return '<button class="start-chat-button" onclick="StartChat(\'' + row.ChatId + '\')">@T("Plugins.Customers.NopChat.Fields.OpenChat").Text</button>';
+    };
+
+</script>
+
+
+<div id="chat-container" class="admin-chat-container" >
+    <div class="head-text" ></div>
+	<div class="messages"></div>
+    <div class="disconnected-message">@T("Plugins.Customers.NopChat.Text.Disconnected").Text</div>
+    <div class="message-container">
+	    <textarea class="message-input" placeholder="@T("Plugins.Customers.NopChat.Text.WriteMessage").Text"></textarea>
+	    <button class="send-btn">@T("Plugins.Customers.NopChat.Text.Send").Text</button>
+    </div>
+</div>
+
+
+
+<div class="cards-group">
+    <div class="card card-default">
+        <div class="card-body">
+            @await Html.PartialAsync("Table", new DataTablesModel
+            {
+                Name = "chat-points-grid",
+                UrlRead = new DataUrl("List", "NopChat", null),
+                Length = Model.PageSize,
+                LengthMenu = Model.AvailablePageSizes,
+                ColumnCollection = new List<ColumnProperty>
+                {
+                    new ColumnProperty(nameof(HeadNopChatModel.Id))
+                    {
+                        ClassName = NopColumnClassDefaults.Button,
+                        Width = "100px",
+                        Render = new RenderCustom("PaintButton")
+                    },
+                    new ColumnProperty(nameof(HeadNopChatModel.ChatId))
+                    {
+                        Title = T("Plugins.Customers.NopChat.Fields.ChatId").Text,
+                        Width = "25%"
+                    },
+                    new ColumnProperty(nameof(HeadNopChatModel.Name))
+                    {
+                        Title = T("Plugins.Customers.NopChat.Fields.Name").Text,
+                        Width = "25%"
+                    },
+                    new ColumnProperty(nameof(HeadNopChatModel.LastMessage))
+                    {
+                        Title = T("Plugins.Customers.NopChat.Fields.LastMessage").Text,
+                        Width = "25%"
+                    },
+                    new ColumnProperty(nameof(HeadNopChatModel.UpdateOnUtc))
+                    {
+                        Title = T("Plugins.Customers.NopChat.Fields.DateTime").Text,
+                        Width = "25%"
+                    }
+                }
+            })
+        </div>
+    </div>
+</div>
+

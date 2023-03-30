@@ -21,6 +21,10 @@
 		chatWindow.SetToUserId("Admin");
 		document.querySelector('#chat-container').style.display = 'block';
 	}
+	else
+	{
+		document.querySelector('.chat-container-float').style.display = "none";
+	}
 
 	const chatBtn = document.querySelector('.chat-btn');
 	chatBtn.addEventListener('click', () => {
@@ -31,7 +35,7 @@
 
 <button class="chat-btn">@T("Plugins.Customers.NopChat.Text.Chat").Text</button>
 
-<div id="chat-container" class="chat-container-float" @(Context.Request.Cookies.ContainsKey("NopChatActive") && Context.Request.Cookies["NopChatActive"] == "true"? "style=display: none;" : "")>
+<div id="chat-container" class="chat-container-float" >
 	<div class="head-chat-container">
 		<button class="boton-cerrar close-btn">
 			<img src="~/Plugins/Customers.NopChat/Content/img/close.png" class="editor_img"  border="0">

@@ -80,6 +80,29 @@ class ChatWindow  {
         }
     }
 
+    getCookie(nombre_de_la_cookie) {
+        // Se crea una variable para almacenar el valor de la cookie
+        var valor_cookie = "";
+
+        // Se crea una cadena con todas las cookies
+        var cookies = document.cookie;
+
+        // Se busca la cookie específica
+        var index = cookies.indexOf(nombre_de_la_cookie + "=");
+        if (index !== -1) {
+            // Se extrae el valor de la cookie
+            index = index + nombre_de_la_cookie.length + 1;
+            var end = cookies.indexOf(";", index);
+            if (end === -1) {
+                end = cookies.length;
+            }
+            valor_cookie = cookies.substring(index, end);
+        }
+
+        // Se devuelve el valor de la cookie
+        return valor_cookie;
+    }
+
     setCookie(c_name, value, exdays) {
         var exdate = new Date();
         exdate.setDate(exdate.getDate() + exdays);
@@ -88,23 +111,9 @@ class ChatWindow  {
     }
 
     NopChatActive() {
-        var dc = document.cookie;
-        var prefix = "NopChatActive=";
-        var begin = dc.indexOf("; " + prefix);
-        if (begin == -1) {
-            begin = dc.indexOf(prefix);
-            if (begin != 0) return null;
-        }
-        else {
-            begin += 2;
-            var end = document.cookie.indexOf(";", begin);
-            if (end == -1) {
-                end = dc.length;
-            }
-        }
-        // because unescape has been deprecated, replaced with decodeURI
-        //return unescape(dc.substring(begin + prefix.length, end));
-        return decodeURI(dc.substring(begin + prefix.length, end)) == "true";
+        var v = this.getCookie("NopChatActive");
+        console.log(v);
+        return v == "true";
     } 
 
 

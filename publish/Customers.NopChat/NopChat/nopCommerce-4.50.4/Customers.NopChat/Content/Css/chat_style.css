@@ -1,0 +1,129 @@
+﻿
+.disconnected-message {
+    color: red;
+}
+
+.selected {
+    color: green;
+}
+
+.head-text{
+    margin-bottom: 10px;
+}
+
+.admin-chat-container {
+    display: block;
+    height: 400px;
+    float: right;
+    margin-left: 20px;
+    border: 1px solid black;
+    padding: 20px;
+    background-color: lightgrey;
+    width: 30%;
+    border-radius: 5px;
+    text-align:left;
+}
+
+.chat-container-float {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    height: 50%;
+    width: 25%;
+    background-color: #ededed;
+    border: 2px solid black;
+    border-radius: 5px;
+    display: none;
+    z-index: 10;
+    padding: 10px;
+    text-align: left;
+}
+
+.head-chat-container {
+    text-align: right;
+    height:30px;
+}
+
+.send-btn {
+    background-color: #25d366;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 5px;
+    border-width: 1px;
+}
+
+.chat-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1;
+}
+.input-container{
+    height:100px;
+}
+
+.start-chat-button {
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.odd:hover {
+    color: green;
+}
+
+.close-btn {
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    color: #8b8b8b;
+    cursor: pointer;
+}
+
+.message-input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-top: 1px solid #bbb;
+    box-sizing: border-box;
+    resize: none;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    min-height:60px;
+}
+
+.admin-chat-container .messages {
+    height: calc(100% - 180px);
+}
+
+.messages {
+    overflow: auto;
+    height: calc(100% - 140px);
+}
+
+
+.message {
+    background-color: #DCF8C6;
+    border: 1px solid black;
+    width: 51%;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
+.from-me {
+    float: right;
+}
+
+.from-others {
+    float: left;
+}
